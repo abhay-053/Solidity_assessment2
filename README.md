@@ -2,7 +2,6 @@
 ## Smart Contract: ErrorHandling
 This Solidity smart contract demonstrates the calculation of an object's weight based on mass, incorporating robust error handling mechanisms using `require()`, `assert()`, and `revert()` statements.
 ## Important Notes
-- Be cautious with `require()` and `revert()` as they consume all gas when they fail, requiring careful consideration.
 - `assert()` is suitable for checking internal errors and should not fail under normal conditions.
 ## Functionality
 The contract provides a single function, `calculateWeight`, to set the value of the weight by taking the mass of the object as input. The implementation includes error handling to ensure the correctness of the weight calculation.
@@ -21,16 +20,17 @@ The contract provides a single function, `calculateWeight`, to set the value of 
 ## Code Overview
 ```solidity
 // SPDX-License-Identifier: MIT
+pragma solidity ^0.8.1;
 contract ErrorHandlingContract {
     uint public gravitationalForce = 10;
-    uint public materialDensity = 5; // New variable
+    uint public materialDensity = 5;
     address public contractOwner;
-
     constructor() {
         contractOwner = msg.sender;
     }
     function setMaterialDensity(uint _density) public {
         require(contractOwner == msg.sender, "You are not the owner");
+        require(_density > 0, "Density must be greater than 0");
         materialDensity = _density;
     }
     function calculateWeight(uint _mass) public view returns (uint) {
@@ -40,7 +40,6 @@ contract ErrorHandlingContract {
         if (weight == 0) {
             revert("Weight of the object cannot be zero");
         }
-
         return weight;
     }
 }
